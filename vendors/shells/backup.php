@@ -49,9 +49,12 @@ class BackupShell extends Shell {
 		
 		$this->out("Backuping...\n");
 		$File = new File($file);
+
+		$config = ConnectionManager::getInstance()->getDataSource($dataSourceName)->config;
 		
 		foreach (ConnectionManager::getInstance()->getDataSource($dataSourceName)->listSources() as $table) {
 			
+			$table = str_replace($config['prefix'], '', $table);
 			$ModelName = Inflector::classify($table);
 			$Model = ClassRegistry::init($ModelName);
 			$DataSource = $Model->getDataSource();
